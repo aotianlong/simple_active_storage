@@ -19,7 +19,12 @@ user.avatar.url
 这样更简单一点呢
 
 ## Usage
-config/initializers/simple_active_storage.rb
+
+generate config file:
+rails g simple_active_storage
+it will generate a file located at: config/initializers/simple_active_storage.rb
+content look like this:
+
 ```ruby
 SimpleActiveStorage.default_url_options = {host: "www.example.com"}
 SimpleActiveStorage.transformation :thumb do
