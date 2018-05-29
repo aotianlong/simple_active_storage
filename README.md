@@ -1,22 +1,24 @@
 # SimpleActiveStorage
-发现ActiveStorage在模型里面获取url非常不方便，想写一个容易的
-比如
+*first of all,I need to apologize for my pool english.*
+
+when you using active storage
+there are some inconvenient things, such as you get the url of attachment:
 ```ruby
-user.avatar.variant("100x100")
+user.avatar.variant(resize: "100x100")
 ```
-每次都要写100x100多不方便
-我们是不是可以这样写
+
+you need repeat `resize: "100x100"` every time.
+
+
+I need a short cut to replace `resize: "100x100"`, like this:
+
 ```ruby
 user.avatar.variant(:thumb)
-```
-这样是不是更简单一些
-url也很不方便，每次都需要url_for才能获取到
-我们是不是能
-```ruby
 user.avatar.path
 user.avatar.url
 ```
-这样更简单一点呢
+
+SimpleActiveStorage is do such thing.
 
 ## Usage
 
@@ -57,6 +59,40 @@ photo.variant(:thumb).url # =>"http://www.example.com/rails/active_storage/repre
 photo.url                 # => "http://www.example.com/rails/active_storage/blobs/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBCdz09IiwiZXhwIjpudWxsLCJwdXIiOiJibG9iX2lkIn19--e81a87b1d919f371e6b665e2c01301cff6d16a26/test.png"
 photo.blob.url            # => "http://www.example.com/rails/active_storage/blobs/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBCdz09IiwiZXhwIjpudWxsLCJwdXIiOiJibG9iX2lkIn19--e81a87b1d919f371e6b665e2c01301cff6d16a26/test.png"
 ```
+
+
+### direct upload
+when use activestorage direct upload
+activestorage.js will make an ajax post to /rails/active_storage/direct_uploads
+and return json data it looks like below:
+
+```javascript
+{
+    "id": 4,
+    "key": "veeUd2b2toSbym6DmZ2pLkoZ",
+    "filename": "avatar.jpg",
+    "content_type": "image/jpeg",
+    "metadata": {},
+    "byte_size": 145516,
+    "checksum": "/uNyp1jXJPXLBD6X0XZn7g==",
+    "created_at": "2018-05-29T16:50:51.801Z",
+    "signed_id": "eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBDUT09IiwiZXhwIjpudWxsLCJwdXIiOiJibG9iX2lkIn19--578572a7c2d5925ac32622a7d7b832f68c536f51",
+    "direct_upload": {
+        "url": "http://localhost:3001/rails/active_storage/disk/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaDdDVG9JYTJWNVNTSWRkbVZsVldReVlqSjBiMU5pZVcwMlJHMWFNbkJNYTI5YUJqb0dSVlE2RVdOdmJuUmxiblJmZEhsd1pVa2lEMmx0WVdkbEwycHdaV2NHT3daVU9oTmpiMjUwWlc1MFgyeGxibWQwYUdrRGJEZ0NPZzFqYUdWamEzTjFiVWtpSFM5MVRubHdNV3BZU2xCWVRFSkVObGd3V0ZwdU4yYzlQUVk3QmxRPSIsImV4cCI6IjIwMTgtMDUtMjlUMTY6NTU6NTIuMTgxWiIsInB1ciI6ImJsb2JfdG9rZW4ifX0=--b2deb5a21ef8b7a2a08cf354052a65e640be6450",
+        "headers": {
+            "Content-Type": "image/jpeg"
+        }
+    },
+    "transformations": {
+        "thumb": "http://www.example.com/rails/active_storage/representations/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBDUT09IiwiZXhwIjpudWxsLCJwdXIiOiJibG9iX2lkIn19--578572a7c2d5925ac32622a7d7b832f68c536f51/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaDdCam9VWTI5dFltbHVaVjl2Y0hScGIyNXpld1k2QzNKbGMybDZaVWtpRERFd01IZ3hNREFHT2daRlZBPT0iLCJleHAiOm51bGwsInB1ciI6InZhcmlhdGlvbiJ9fQ==--20ae94033d7a10dcb862bd24c1dcbb3740e61e7c/avatar.jpg",
+        "tiny": "http://www.example.com/rails/active_storage/representations/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBDUT09IiwiZXhwIjpudWxsLCJwdXIiOiJibG9iX2lkIn19--578572a7c2d5925ac32622a7d7b832f68c536f51/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaDdCam9VWTI5dFltbHVaVjl2Y0hScGIyNXpld1k2QzNKbGMybDZaVWtpQ2pJd2VESXdCam9HUlZRPSIsImV4cCI6bnVsbCwicHVyIjoidmFyaWF0aW9uIn19--c8fb6fe35e8d91c55a9323e9858130607ecdb1bf/avatar.jpg",
+        "medium": "http://www.example.com/rails/active_storage/representations/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBDUT09IiwiZXhwIjpudWxsLCJwdXIiOiJibG9iX2lkIn19--578572a7c2d5925ac32622a7d7b832f68c536f51/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaDdCam9VWTI5dFltbHVaVjl2Y0hScGIyNXpld1k2QzNKbGMybDZaVWtpRERRd01IZzBNREFHT2daRlZBPT0iLCJleHAiOm51bGwsInB1ciI6InZhcmlhdGlvbiJ9fQ==--b87eb27c4abc3f9bd937642f2e5809bfd553edf8/avatar.jpg"
+    }
+}
+```
+
+originally there is no transformations field in json data.
+the transformations field data is provide by SimpleActiveStorage.
 
 ## Installation
 Add this line to your application's Gemfile:
