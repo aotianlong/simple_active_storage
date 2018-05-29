@@ -1,0 +1,8 @@
+Description:
+    Explain the generator
+
+Example:
+    rails generate simple_active_storage
+
+    This will create:
+        what/will/it/create
