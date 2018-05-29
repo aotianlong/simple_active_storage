@@ -12,6 +12,10 @@ module SimpleActiveStorage
 
       end
 
+      config.after_initialize do
+        ActiveStorage::DirectUploadsController.send :prepend,SimpleActiveStorage::DirectUploadsController
+      end
+
     end
 
   end
