@@ -9,9 +9,9 @@ Gem::Specification.new do |s|
   s.version     = SimpleActiveStorage::VERSION
   s.authors     = ["aotianlong"]
   s.email       = ["aotianlong@gmail.com"]
-  s.homepage    = "TODO"
-  s.summary     = "TODO: Summary of SimpleActiveStorage."
-  s.description = "TODO: Description of SimpleActiveStorage."
+  s.homepage    = "http://www.github.com/aotianlong"
+  s.summary     = "add shortcut variant support for active storage"
+  s.description = "improve active storage"
   s.license     = "MIT"
 
   s.files = Dir["{app,config,db,lib}/**/*", "MIT-LICENSE", "Rakefile", "README.md"]
