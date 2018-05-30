@@ -10,9 +10,6 @@ module SimpleActiveStorage
         ActiveStorage::Preview.send :include,SimpleActiveStorage::Url
         ActiveStorage::Blob.send :include,SimpleActiveStorage::Url
 
-      end
-
-      config.after_initialize do
         ActiveStorage::DirectUploadsController.send :prepend,SimpleActiveStorage::DirectUploadsController
       end
 
