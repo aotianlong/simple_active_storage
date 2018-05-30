@@ -11,6 +11,19 @@ module SimpleActiveStorage
         ActiveStorage::Blob.send :include,SimpleActiveStorage::Url
 
         ActiveStorage::DirectUploadsController.send :prepend,SimpleActiveStorage::DirectUploadsController
+
+
+        old_wrap = ActiveStorage::Variation.method :wrap
+        # redefine wrap
+        ActiveStorage::Variation.define_singleton_method :wrap do |transformation|
+          if SimpleActiveStorage.config.enable_shortcut_url && transformation.is_a?(String)
+            if SimpleActiveStorage.transformation_exists? transformation.to_sym
+              transformation = transformation.to_sym
+            end
+          end
+          old_wrap.call(transformation)
+        end
+
       end
 
     end

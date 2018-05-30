@@ -2,6 +2,7 @@ require 'test_helper'
 
 class UserTest < ActiveSupport::TestCase
   test "photos" do
+    SimpleActiveStorage.config.enable_shortcut_url = false
     aotianlong = users(:aotianlong)
     aotianlong.photos.attach io: File.new(Rails.root.join("test","fixtures","files","test.png")),filename: "test.png"
     photo = aotianlong.photos[0]
@@ -16,6 +17,7 @@ class UserTest < ActiveSupport::TestCase
 
 
   test "avatar" do
+    SimpleActiveStorage.config.enable_shortcut_url = false
     aotianlong = users(:aotianlong)
     aotianlong.avatar.attach io: File.new(Rails.root.join("test","fixtures","files","test.png")),filename: "test.png"
     assert aotianlong.avatar.attached?
@@ -34,6 +36,15 @@ class UserTest < ActiveSupport::TestCase
     # ActiveStorage::Attached::One
     assert_equal aotianlong.avatar.path,path
     assert_equal aotianlong.avatar.url,url
+  end
+
+
+  test "short cut url" do
+    SimpleActiveStorage.config.enable_shortcut_url = true
+    aotianlong = users(:aotianlong)
+    aotianlong.avatar.attach io: File.new(Rails.root.join("test","fixtures","files","test.png")),filename: "test.png"
+    assert_equal  aotianlong.avatar.variant("thumb").url,"http://www.example.com/rails/active_storage/representations/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBCZz09IiwiZXhwIjpudWxsLCJwdXIiOiJibG9iX2lkIn19--08f03241905408289698b118698ca7642c3e691e/thumb/test.png"
+    assert_equal  aotianlong.avatar.variant(:thumb).url,"http://www.example.com/rails/active_storage/representations/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBCZz09IiwiZXhwIjpudWxsLCJwdXIiOiJibG9iX2lkIn19--08f03241905408289698b118698ca7642c3e691e/thumb/test.png"
   end
 
 end

@@ -1,4 +1,5 @@
 SimpleActiveStorage.default_url_options = {host: "www.example.com"}
+SimpleActiveStorage.config.enable_shortcut_url = true
 SimpleActiveStorage.transformation :thumb do
   {
     combine_options: {

@@ -5,4 +5,5 @@ require "simple_active_storage/direct_uploads_controller"
 
 module SimpleActiveStorage
   # Your code goes here...
+  include ActiveSupport::Configurable
 end
