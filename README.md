@@ -95,7 +95,7 @@ originally there is no transformations field in json data.
 the transformations field data is provide by SimpleActiveStorage.
 
 ### short cut url
-the representation url is very long 
+the representation url is very long
 because rails encrypted transformation information to a very long string
 ```
 http://www.example.com/rails/active_storage/representations/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBDUT09IiwiZXhwIjpudWxsLCJwdXIiOiJibG9iX2lkIn19--578572a7c2d5925ac32622a7d7b832f68c536f51/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaDdCam9VWTI5dFltbHVaVjl2Y0hScGIyNXpld1k2QzNKbGMybDZaVWtpRERRd01IZzBNREFHT2daRlZBPT0iLCJleHAiOm51bGwsInB1ciI6InZhcmlhdGlvbiJ9fQ==--b87eb27c4abc3f9bd937642f2e5809bfd553edf8/avatar.jpg
@@ -105,7 +105,7 @@ eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaDdCam9VWTI5dFltbHVaVjl2Y0hScGIyNXpld1k2QzNKbGMy
 ```
 this is part of the representation url
 included transformation information , can be decrypted by rails
-if you turned on by set 
+if you turned on by set
 ``` ruby
 SimpleActiveStorage.config.enable_shortcut_url = true
 ```
@@ -114,6 +114,14 @@ you will get this short url:
 http://www.example.com/rails/active_storage/representations/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBDUT09IiwiZXhwIjpudWxsLCJwdXIiOiJibG9iX2lkIn19--578572a7c2d5925ac32622a7d7b832f68c536f51/thumb/avatar.jpg
 ```
 the difference between two urls is that transofrmation(variantation_key) part.
+
+
+### auto remove duplicate blobs
+user = User.first
+avatar = user.avatar
+user.photos.attach avatar.blob
+user.photos.attach avatar.blob # raise error without simple active storage
+user.photos.attachments.size # 1
 
 
 ## Installation

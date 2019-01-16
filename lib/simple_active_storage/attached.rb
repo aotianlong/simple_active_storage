@@ -3,9 +3,18 @@
 module SimpleActiveStorage
   module Attached
     module Many
+      # 检查过滤掉已经存在的
       def attach(*attachables)
         record.try(:before_active_storage_attach,attachables)
-        result = super(*attachables)
+
+        # remove duplicate attachments
+        signed_ids = attachments.map(&:signed_id)
+        blobs = attachables.map{|attachable| create_blob_from attachable}.compact
+        filtered_blobs = blobs.find_all{|blob|
+          !signed_ids.include?(blob.signed_id)
+        }
+
+        result = super(*filtered_blobs)
         record.try(:after_active_storage_attach,{name: name, attachments: attachments})
         result
       end

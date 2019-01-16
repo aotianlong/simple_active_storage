@@ -47,4 +47,12 @@ class UserTest < ActiveSupport::TestCase
     assert_equal  aotianlong.avatar.variant(:thumb).url,"http://www.example.com/rails/active_storage/representations/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBCZz09IiwiZXhwIjpudWxsLCJwdXIiOiJibG9iX2lkIn19--08f03241905408289698b118698ca7642c3e691e/thumb/test.png"
   end
 
+  test "remove duplicate blobs" do
+    aotianlong = users(:aotianlong)
+    aotianlong.avatar.attach io: File.new(Rails.root.join("test","fixtures","files","test.png")),filename: "test.png"
+    aotianlong.photos.attach aotianlong.avatar.blob
+    aotianlong.photos.attach aotianlong.avatar.blob
+    assert_equal 1,aotianlong.photos.attachments.size
+  end
+
 end
